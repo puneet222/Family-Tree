@@ -147,6 +147,8 @@ module.exports = {
       } else {
         return null;
       }
+    } else {
+      return null;
     }
   },
 
@@ -159,16 +161,35 @@ module.exports = {
           : commands.NONE;
       console.log(returnedSiblings);
     } else {
-      console.log("Mother does not exist");
+      console.log(commands.NONE);
     }
   },
 
   getSisterInLaw: function(name, queen) {
-    // wives of siblings
-    let siblings = this.getSiblingPerson(name, queen);
-    let wivesOfSiblings = siblings
-      .filter(sibling => sibling.isFemale === false && sibling.spouse)
-      .map(bro => capitalize(bro.spouse.name));
-    console.log(wivesOfSiblings);
+    let person = findPerson(queen, name, true);
+    if (person) {
+      // wives of siblings
+      let siblings = this.getSiblingPerson(name, queen);
+      let wivesOfSiblings = [];
+      if (siblings) {
+        wivesOfSiblings = siblings
+          .filter(sibling => sibling.isFemale === false && sibling.spouse)
+          .map(bro => capitalize(bro.spouse.name));
+      }
+      console.log(wivesOfSiblings);
+      // spouse's sisters
+      let spouse = person.name === name ? person.spouse : person;
+      let spouseSisters = [];
+      if (spouse) {
+        let spouseSiblings = this.getSiblingPerson(spouse.name, queen);
+        spouseSisters = spouseSiblings
+          .filter(sibling => sibling.isFemale === true)
+          .map(sis => capitalize(sis.name));
+      }
+      console.log(spouseSisters);
+    } else {
+      console.log(commands.PERSON_NOT_FOUND);
+      return;
+    }
   }
 };

@@ -54,6 +54,7 @@ standard_input.on("data", function(data) {
           familyTree.getMaternalAunt(name, queen);
           break;
         case commands.RELATIONSHIPS.SISTER_IN_LAW:
+          familyTree.getSisterInLaw(name, queen);
           break;
         case commands.RELATIONSHIPS.BROTHER_IN_LAW:
           break;
