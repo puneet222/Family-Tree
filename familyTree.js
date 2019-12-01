@@ -1,5 +1,11 @@
 const findPerson = require("./findPerson");
 const Person = require("./Person");
+const commands = require("./commands");
+
+const capitalize = s => {
+  if (typeof s !== "string") return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
 
 module.exports = {
   insertSpouse: function(name, betterHalf, queen) {
@@ -130,18 +136,39 @@ module.exports = {
     }
   },
 
-  getSiblings: function(name, queen) {
+  getSiblingPerson: function(name, queen) {
     let person = findPerson(queen, name, false);
     if (person) {
       if (person.mother) {
-        let siblings = person.mother.children
-          .filter(child => child.name !== person.name)
-          .map(sibling => sibling.name)
-          .join(" ");
-        console.log(siblings);
+        let siblings = person.mother.children.filter(
+          child => child.name !== person.name
+        );
+        return siblings;
       } else {
-        console.log("Mother does not exists");
+        return null;
       }
     }
+  },
+
+  getSiblings: function(name, queen) {
+    let siblings = this.getSiblingPerson(name, queen);
+    if (siblings) {
+      let returnedSiblings =
+        siblings.length > 0
+          ? siblings.map(sibling => capitalize(sibling.name)).join(" ")
+          : commands.NONE;
+      console.log(returnedSiblings);
+    } else {
+      console.log("Mother does not exist");
+    }
+  },
+
+  getSisterInLaw: function(name, queen) {
+    // wives of siblings
+    let siblings = this.getSiblingPerson(name, queen);
+    let wivesOfSiblings = siblings
+      .filter(sibling => sibling.isFemale === false && sibling.spouse)
+      .map(bro => capitalize(bro.spouse.name));
+    console.log(wivesOfSiblings);
   }
 };
