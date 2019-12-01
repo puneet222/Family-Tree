@@ -6,52 +6,22 @@ const utils = require("./utils");
 const insertSpouse = require("./update-family/insertSpouse");
 const insertChild = require("./update-family/insertChild");
 const paternal = require("./relationships/paternal");
+const maternal = require("./relationships/maternal");
 const siblings = require("./relationships/siblings");
 const children = require("./relationships/children");
 
 module.exports = {
   insertSpouse,
+
   insertChild,
+
   getPaternalUncle: paternal.getPaternalUncle,
+
   getPaternalAunt: paternal.getPaternalAunt,
 
-  getMaternalUncle: function(name, queen) {
-    let person = findPerson(queen, name, false);
-    if (person) {
-      let mother = person.mother;
-      if (mother.mother) {
-        let maternalUncles = mother.mother.children
-          .filter(child => child.isFemale === false)
-          .map(uncle => uncle.name)
-          .join(" ");
-        console.log(maternalUncles);
-      } else {
-        console.log("No Maternal Uncles");
-      }
-    } else {
-      console.log("Mother does not exists");
-    }
-  },
+  getMaternalUncle: maternal.getMaternalUncle,
 
-  getMaternalAunt: function(name, queen) {
-    let person = findPerson(queen, name, false);
-    if (person) {
-      let mother = person.mother;
-      if (mother.mother) {
-        let maternalAunts = mother.mother.children
-          .filter(
-            child => child.isFemale === true && child.name !== mother.name
-          )
-          .map(aunt => aunt.name)
-          .join(" ");
-        console.log(maternalAunts);
-      } else {
-        console.log("No Maternal Aunts");
-      }
-    } else {
-      console.log("Mother does not exists");
-    }
-  },
+  getMaternalAunt: maternal.getMaternalAunt,
 
   getSon: children.getSon,
 
