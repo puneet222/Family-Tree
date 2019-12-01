@@ -7,6 +7,7 @@ const insertSpouse = require("./update-family/insertSpouse");
 const insertChild = require("./update-family/insertChild");
 const paternal = require("./relationships/paternal");
 const siblings = require("./relationships/siblings");
+const children = require("./relationships/children");
 
 module.exports = {
   insertSpouse,
@@ -52,27 +53,9 @@ module.exports = {
     }
   },
 
-  getSon: function(name, queen) {
-    let person = findPerson(queen, name, true);
-    if (person) {
-      let children = person.children
-        .filter(child => child.isFemale === false)
-        .map(sons => sons.name)
-        .join(" ");
-      console.log(children);
-    }
-  },
+  getSon: children.getSon,
 
-  getDaughter: function(name, queen) {
-    let person = findPerson(queen, name, true);
-    if (person) {
-      let children = person.children
-        .filter(child => child.isFemale === true)
-        .map(sons => sons.name)
-        .join(" ");
-      console.log(children);
-    }
-  },
+  getDaughter: children.getDaughter,
 
   getSiblings: siblings.getSiblings,
 
