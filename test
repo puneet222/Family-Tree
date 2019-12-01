@@ -1,0 +1,7 @@
+GET_RELATIONSHIP daritha Paternal-Uncle
+GET_RELATIONSHIP arit Paternal-Aunt
+GET_RELATIONSHIP yodhan Maternal-Aunt
+GET_RELATIONSHIP satvy Maternal-Uncle
+GET_RELATIONSHIP chit Son
+GET_RELATIONSHIP chit Daughter
+GET_RELATIONSHIP vasa Siblings
