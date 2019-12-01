@@ -1,54 +1,18 @@
 const findPerson = require("./findPerson");
 const Person = require("./Person");
 const commands = require("./commands");
+const utils = require("./utils");
 
 const insertSpouse = require("./update-family/insertSpouse");
 const insertChild = require("./update-family/insertChild");
-
-const capitalize = s => {
-  if (typeof s !== "string") return "";
-  return s.charAt(0).toUpperCase() + s.slice(1);
-};
+const paternal = require("./relationships/paternal");
+const siblings = require("./relationships/siblings");
 
 module.exports = {
   insertSpouse,
   insertChild,
-  getPaternalUncle: function(name, queen) {
-    let person = findPerson(queen, name, false);
-    if (person) {
-      let father = person.father;
-      if (father.mother) {
-        let paternalUncles = father.mother.children
-          .filter(
-            child => child.isFemale === false && child.name != father.name
-          )
-          .map(uncle => uncle.name)
-          .join(" ");
-        console.log(paternalUncles);
-      } else {
-        console.log("No Paternal Uncles");
-      }
-    } else {
-      console.log("Father does not exists");
-    }
-  },
-  getPaternalAunt: function(name, queen) {
-    let person = findPerson(queen, name, false);
-    if (person) {
-      let father = person.father;
-      if (father.mother) {
-        let paternalAunts = father.mother.children
-          .filter(child => child.isFemale === true)
-          .map(aunt => aunt.name)
-          .join(" ");
-        console.log(paternalAunts);
-      } else {
-        console.log("No Paternal Aunts");
-      }
-    } else {
-      console.log("Father does not exists");
-    }
-  },
+  getPaternalUncle: paternal.getPaternalUncle,
+  getPaternalAunt: paternal.getPaternalAunt,
 
   getMaternalUncle: function(name, queen) {
     let person = findPerson(queen, name, false);
@@ -110,34 +74,7 @@ module.exports = {
     }
   },
 
-  getSiblingPerson: function(name, queen) {
-    let person = findPerson(queen, name, false);
-    if (person) {
-      if (person.mother) {
-        let siblings = person.mother.children.filter(
-          child => child.name !== person.name
-        );
-        return siblings;
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  },
-
-  getSiblings: function(name, queen) {
-    let siblings = this.getSiblingPerson(name, queen);
-    if (siblings) {
-      let returnedSiblings =
-        siblings.length > 0
-          ? siblings.map(sibling => capitalize(sibling.name)).join(" ")
-          : commands.NONE;
-      console.log(returnedSiblings);
-    } else {
-      console.log(commands.NONE);
-    }
-  },
+  getSiblings: siblings.getSiblings,
 
   getSisterInLaw: function(name, queen) {
     let person = findPerson(queen, name, true);
@@ -148,7 +85,7 @@ module.exports = {
       if (siblings) {
         wivesOfSiblings = siblings
           .filter(sibling => sibling.isFemale === false && sibling.spouse)
-          .map(bro => capitalize(bro.spouse.name));
+          .map(bro => utils.capitalize(bro.spouse.name));
       }
       console.log(wivesOfSiblings);
       // spouse's sisters
@@ -158,7 +95,7 @@ module.exports = {
         let spouseSiblings = this.getSiblingPerson(spouse.name, queen);
         spouseSisters = spouseSiblings
           .filter(sibling => sibling.isFemale === true)
-          .map(sis => capitalize(sis.name));
+          .map(sis => utils.capitalize(sis.name));
       }
       console.log(spouseSisters);
     } else {
