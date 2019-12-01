@@ -2,43 +2,17 @@ const findPerson = require("./findPerson");
 const Person = require("./Person");
 const commands = require("./commands");
 
+const insertSpouse = require("./update-family/insertSpouse");
+const insertChild = require("./update-family/insertChild");
+
 const capitalize = s => {
   if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
 module.exports = {
-  insertSpouse: function(name, betterHalf, queen) {
-    // find the betterhalf
-    let person = findPerson(queen, betterHalf, false);
-    if (!person.spouse) {
-      let spouse = new Person(
-        name,
-        !person.isFemale,
-        person,
-        null,
-        null,
-        person.children
-      );
-      person.spouse = spouse;
-    } else {
-      console.log("Spouse Already present");
-    }
-  },
-  insertChild: function(name, gender, mother, queen) {
-    // find the object whose name is same as mother and gender female
-    // and gender female of spouse name as mother and gender male
-    let parent = findPerson(queen, mother, true);
-    if (parent) {
-      let gen = gender === "female" ? true : false;
-      let motherObj = parent.isFemale ? parent : parent.spouse;
-      let fatherObj = parent.isFemale ? parent.spouse : parent;
-      let child = new Person(name, gen, null, motherObj, fatherObj, []);
-      parent.children.push(child);
-    } else {
-      console.log("Mother not found");
-    }
-  },
+  insertSpouse,
+  insertChild,
   getPaternalUncle: function(name, queen) {
     let person = findPerson(queen, name, false);
     if (person) {
