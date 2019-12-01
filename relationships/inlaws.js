@@ -10,10 +10,23 @@ function getWivesOfSiblings(siblings) {
   return wives;
 }
 
+function getHusbandsOfSiblings(siblings) {
+  let husbands = siblings
+    .filter(sibling => sibling.isFemale === true && sibling.spouse)
+    .map(sis => utils.capitalize(sis.spouse.name));
+  return husbands;
+}
+
 function getSisters(siblings) {
   return siblings
     .filter(sibling => sibling.isFemale === true)
     .map(sis => utils.capitalize(sis.name));
+}
+
+function getBrothers(siblings) {
+  return siblings
+    .filter(sibling => sibling.isFemale === false)
+    .map(bro => utils.capitalize(bro.name));
 }
 
 function mergeArrays(arr1, arr2) {
@@ -23,13 +36,12 @@ function mergeArrays(arr1, arr2) {
 function getSisterInLaw(name, queen) {
   let person = findPerson(queen, name, true);
   if (person) {
-    // wives of siblings
-    let wifeSiblings = siblings.getSiblingPerson(name, queen);
+    // wives of siblings (brothers)
+    let personSiblings = siblings.getSiblingPerson(name, queen);
     let wivesOfSiblings = [];
-    if (wifeSiblings) {
-      wivesOfSiblings = getWivesOfSiblings(wifeSiblings);
+    if (personSiblings) {
+      wivesOfSiblings = getWivesOfSiblings(personSiblings);
     }
-    console.log(wivesOfSiblings);
     // spouse's sisters
     let spouse = person.name === name ? person.spouse : person;
     let spouseSisters = [];
@@ -39,7 +51,6 @@ function getSisterInLaw(name, queen) {
         spouseSisters = getSisters(spouseSiblings);
       }
     }
-    console.log(spouseSisters);
     let sisterInLaws = mergeArrays(spouseSisters, wivesOfSiblings);
     sisterInLaws.length > 0
       ? console.log(sisterInLaws.join(" "))
@@ -50,6 +61,34 @@ function getSisterInLaw(name, queen) {
   }
 }
 
+function getBrotherInLaw(name, queen) {
+  let person = findPerson(queen, name, true);
+  if (person) {
+    // get husbands of siblings (sisters)
+    let personSiblings = siblings.getSiblingPerson(name, queen);
+    let husbandOfSiblings = [];
+    if (personSiblings) {
+      husbandOfSiblings = getHusbandsOfSiblings(personSiblings);
+    }
+    // spouse's brothers
+    let spouse = person.name === name ? person.spouse : person;
+    let spouseBrothers = [];
+    if (spouse) {
+      let spouseSiblings = siblings.getSiblingPerson(spouse.name, queen);
+      if (spouseSiblings) {
+        spouseBrothers = getBrothers(spouseSiblings);
+      }
+    }
+    let brotherInLaws = spouseBrothers.concat(husbandOfSiblings);
+    brotherInLaws.length > 0
+      ? console.log(brotherInLaws.join(" "))
+      : console.log(commands.NONE);
+  } else {
+    console.log(commands.PERSON_NOT_FOUND);
+  }
+}
+
 module.exports = {
-  getSisterInLaw
+  getSisterInLaw,
+  getBrotherInLaw
 };

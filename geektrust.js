@@ -7,14 +7,6 @@ let queen = familySetup();
 
 let standard_input = process.stdin;
 
-// familyTree.getPaternalUncle("dritha", queen);
-// familyTree.getPaternalAunt("arit", queen);
-// familyTree.getMaternalAunt("yodhan", queen);
-// familyTree.getMaternalUncle("satvy", queen);
-// familyTree.getSon("chit", queen);
-// familyTree.getDaughter("chit", queen);
-// familyTree.getSiblings("vasa", queen);
-
 // Set input character encoding.
 standard_input.setEncoding("utf-8");
 
@@ -57,6 +49,7 @@ standard_input.on("data", function(data) {
           familyTree.getSisterInLaw(name, queen);
           break;
         case commands.RELATIONSHIPS.BROTHER_IN_LAW:
+          familyTree.getBrotherInLaw(name, queen);
           break;
         case commands.RELATIONSHIPS.SON:
           familyTree.getSon(name, queen);

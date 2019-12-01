@@ -25,5 +25,7 @@ module.exports = {
 
   getSiblings: siblings.getSiblings,
 
-  getSisterInLaw: inlaws.getSisterInLaw
+  getSisterInLaw: inlaws.getSisterInLaw,
+
+  getBrotherInLaw: inlaws.getBrotherInLaw
 };
