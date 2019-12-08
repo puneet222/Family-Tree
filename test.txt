@@ -19,3 +19,4 @@ GET_RELATIONSHIP atya Brother-In-Law
 GET_RELATIONSHIP asva Brother-In-Law
 GET_RELATIONSHIP satvy Brother-In-Law
 GET_RELATIONSHIP lika Brother-In-Law
+
